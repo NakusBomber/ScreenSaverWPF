@@ -36,7 +36,10 @@ public class MessageBoxViewModel : ViewModelBase
 		_title = title;
 		_message = message;
 
-		var activeWindow = Application.Current.Windows.OfType<Window>().First(w => w.IsActive);
-		CloseCommand = new DelegateCommand(o => activeWindow?.Close());
+		CloseCommand = new DelegateCommand(o =>
+		{
+			var activeWindow = Application.Current.Windows.OfType<Window>().First(w => w.IsActive);
+			activeWindow?.Close();
+		});
 	}
 }

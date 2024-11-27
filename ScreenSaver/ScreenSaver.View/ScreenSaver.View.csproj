@@ -12,4 +12,12 @@
     <ProjectReference Include="..\ScreenSaver.ViewModel\ScreenSaver.ViewModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Icons\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
+  </ItemGroup>
+
 </Project>

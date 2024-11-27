@@ -4,9 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScreenSaver.View"
+        xmlns:vms="clr-namespace:ScreenSaver.ViewModel.ViewModels;assembly=ScreenSaver.ViewModel"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ScreenSaver"
+        Height="200"
+        Width="300"
+        d:DataContext="{d:DesignInstance Type=vms:MainViewModel}">
     <Grid>
-
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Splash screen"/>
+                <xctk:DateTimeUpDown DataContext="{Binding DateTimeUpDownViewModel}"
+                                     Value="{Binding Value}"
+                                     Format="Custom"
+                                     AllowSpin="True"
+                                     ButtonSpinnerHeight="30"
+                                     AllowTextInput="False"
+                                     DefaultValue="{Binding DefaultValue}"
+                                     FormatString="HH:mm:ss"
+                                     Minimum="{Binding Minimum}"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
