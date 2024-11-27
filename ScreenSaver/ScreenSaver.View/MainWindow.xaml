@@ -14,19 +14,37 @@
         Width="300"
         d:DataContext="{d:DesignInstance Type=vms:MainViewModel}">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Vertical">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="Settings" Command="{Binding OpenSettingsWindowCommand}"/>
+            <MenuItem Header="Info" Command="{Binding OpenInfoWindowCommand}"/>
+        </Menu>
+        <StackPanel Orientation="Vertical"
+                    Margin="5"
+                    Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Splash screen"/>
-                <xctk:DateTimeUpDown DataContext="{Binding DateTimeUpDownViewModel}"
-                                     Value="{Binding Value}"
-                                     Format="Custom"
-                                     AllowSpin="True"
-                                     ButtonSpinnerHeight="30"
-                                     AllowTextInput="False"
-                                     DefaultValue="{Binding DefaultValue}"
-                                     FormatString="HH:mm:ss"
-                                     Minimum="{Binding Minimum}"/>
+                <ComboBox />
+                <Button Content="Show"
+                        Width="60"
+                        Command="{Binding TestSplashScreenCommand}"/>
             </StackPanel>
+            <TextBlock Text="Interval"/>
+            <xctk:DateTimeUpDown DataContext="{Binding DateTimeUpDownViewModel}"
+                                 Width="200"
+                                 Value="{Binding Value}"
+                                 Format="Custom"
+                                 TextAlignment="Center"
+                                 AllowSpin="True"
+                                 ButtonSpinnerHeight="30"
+                                 AllowTextInput="False"
+                                 DefaultValue="{Binding DefaultValue}"
+                                 FormatString="HH 'hours' mm 'mins' ss 'secs'"
+                                 Minimum="{Binding Minimum}"/>
         </StackPanel>
     </Grid>
 </Window>
