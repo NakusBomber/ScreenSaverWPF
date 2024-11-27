@@ -4,12 +4,14 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Forms;
 using System.Diagnostics;
+using ScreenSaver.Model.Utils;
+using ScreenSaver.Model.Interfaces;
+using System.Drawing;
 
 namespace ScreenSaver.ViewModel.ViewModels;
 
 public class SplashScreenViewModel : ViewModelBase
 {
-	
 	public int Top { get; init; }
 	public int Left { get; init; }	
 
@@ -17,8 +19,8 @@ public class SplashScreenViewModel : ViewModelBase
 
 	public int Width { get; init; }
 
-	private WriteableBitmap _bitmap;
-	public WriteableBitmap Bitmap
+	private BitmapSource _bitmap;
+	public BitmapSource Bitmap
 	{
 		get => _bitmap;
 		set
@@ -28,40 +30,13 @@ public class SplashScreenViewModel : ViewModelBase
 		}
 	}
 
-	public SplashScreenViewModel(Screen screen)
+	public SplashScreenViewModel(Rectangle rectangle, BitmapSource bitmap)
 	{
-		Debug.Print(screen.DeviceName);
-		Debug.Print(screen.WorkingArea.Width.ToString());
-		Debug.Print(screen.WorkingArea.Height.ToString());
-		Debug.Print(screen.Bounds.Width.ToString());
-		Debug.Print(screen.Bounds.Height.ToString());
+		Top = rectangle.Top;
+		Left = rectangle.Left;
+		Height = rectangle.Height;
+		Width = rectangle.Width;
 
-		var ratio = Math.Max(Screen.PrimaryScreen!.WorkingArea.Width / SystemParameters.PrimaryScreenWidth,
-							Screen.PrimaryScreen.WorkingArea.Height / SystemParameters.PrimaryScreenHeight);
-
-		Left = (int)(screen.Bounds.Left / ratio);
-		Top = (int)(screen.Bounds.Top / ratio);
-		Width = (int)(screen.Bounds.Width / ratio);
-		Height = (int)(screen.Bounds.Height / ratio);
-
-		_bitmap = CreateBitmap(Height, Width);
-	}
-
-
-	private WriteableBitmap CreateBitmap(int height, int width)
-	{
-		var bitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Rgb24, null);
-		var pixels = new byte[height * width * 3];
-
-		for (int i = 0; i < pixels.Length; i += 3)
-		{
-			pixels[i] = 255; 
-			pixels[i + 1] = 0; 
-			pixels[i + 2] = 0;
-		}
-
-		bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 3, 0);
-
-		return bitmap;
+		_bitmap = bitmap;
 	}
 }

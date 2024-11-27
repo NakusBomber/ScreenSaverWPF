@@ -1,10 +1,15 @@
-﻿using ScreenSaver.ViewModel.Bases;
+﻿using ScreenSaver.Model.Implementations;
+using ScreenSaver.Model.Utils;
+using ScreenSaver.ViewModel.Bases;
 using ScreenSaver.ViewModel.Interfaces;
 using ScreenSaver.ViewModel.ViewModels.Controls;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace ScreenSaver.ViewModel.ViewModels;
 
@@ -40,7 +45,17 @@ public class MainViewModel : ViewModelBase
 
 		foreach (var screen in screens)
 		{
-			var vm = new SplashScreenViewModel(screen);
+			var ratio = Math.Max(Screen.PrimaryScreen!.WorkingArea.Width / SystemParameters.PrimaryScreenWidth,
+							Screen.PrimaryScreen.WorkingArea.Height / SystemParameters.PrimaryScreenHeight);
+
+			var left = (int)(screen.Bounds.Left / ratio);
+			var top = (int)(screen.Bounds.Top / ratio);
+			var width = (int)(screen.Bounds.Width / ratio);
+			var height = (int)(screen.Bounds.Height / ratio);
+
+			var rectangle = new Rectangle(left, top, width, height);
+			var bitmap = MediaUtils.SolidColorBitmap(height, width, Colors.Gray);
+			var vm = new SplashScreenViewModel(rectangle, bitmap);
 
 			_splashScreenService.Show(vm);
 		}

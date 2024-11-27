@@ -13,6 +13,8 @@ public class SplashScreenService : IWindowService<SplashScreenViewModel>
 		window.DataContext = viewModel;
 		window.Top = viewModel.Top;
 		window.Left = viewModel.Left;
+		window.Width = viewModel.Width;
+		window.Height = viewModel.Height;
 		
 		window.Show();
 		
