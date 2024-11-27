@@ -5,4 +5,4 @@
 
 ## Extended WPF Toolkit
 
-<a src="https://xceed.com"><img src="https://xceed.com/wp-content/uploads/2024/04/cropped-xceed-logo.png" alt="Xceed" width="75"><a/>
+<a href="https://xceed.com"><img src="https://xceed.com/wp-content/uploads/2024/04/cropped-xceed-logo.png" alt="Xceed" width="150"></a>
