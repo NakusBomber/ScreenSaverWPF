@@ -26,31 +26,42 @@
         <StackPanel Orientation="Vertical"
                     Margin="5"
                     Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Splash screen"/>
-                <ComboBox />
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Splash screen"
+                           Padding="0,0,20,0"/>
                 <Button Content="Show"
                         Width="60"
                         Command="{Binding TestSplashScreenCommand}"/>
             </StackPanel>
-            <TextBlock Text="Interval"/>
-            <xctk:DateTimeUpDown DataContext="{Binding DateTimeUpDownViewModel}"
-                                 Width="200"
-                                 Value="{Binding Value}"
-                                 Format="Custom"
-                                 TextAlignment="Center"
-                                 AllowSpin="True"
-                                 ButtonSpinnerHeight="30"
-                                 AllowTextInput="False"
-                                 DefaultValue="{Binding DefaultValue}"
-                                 FormatString="HH 'hours' mm 'mins' ss 'secs'"
-                                 Minimum="{Binding Minimum}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="ValueChanged">
-                        <i:InvokeCommandAction Command="{Binding ValueChangedCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </xctk:DateTimeUpDown>
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Height="30">
+                <TextBlock Text="Interval"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"
+                           Padding="0,0,20,0"/>
+                <xctk:DateTimeUpDown DataContext="{Binding DateTimeUpDownViewModel}"
+                                     Width="200"
+                                     Value="{Binding Value}"
+                                     Format="Custom"
+                                     TextAlignment="Center"
+                                     AllowSpin="True"
+                                     ButtonSpinnerHeight="30"
+                                     AllowTextInput="False"
+                                     DefaultValue="{Binding DefaultValue}"
+                                     FormatString="HH 'hours' mm 'mins' ss 'secs'"
+                                     Minimum="{Binding Minimum}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="ValueChanged">
+                            <i:InvokeCommandAction Command="{Binding ValueChangedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </xctk:DateTimeUpDown>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
