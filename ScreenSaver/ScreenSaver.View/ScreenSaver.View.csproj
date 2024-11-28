@@ -6,14 +6,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Icons\screen.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ScreenSaver.ViewModel\ScreenSaver.ViewModel.csproj" />
+    <Content Include="Resources\Icons\screen.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Icons\" />
+    <ProjectReference Include="..\ScreenSaver.ViewModel\ScreenSaver.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
