@@ -1,4 +1,6 @@
-﻿using ScreenSaver.View.Services;
+﻿using ScreenSaver.Model.Implementations;
+using ScreenSaver.View.Services;
+using ScreenSaver.ViewModel.Services;
 using ScreenSaver.ViewModel.ViewModels;
 using System.Configuration;
 using System.Data;
@@ -15,8 +17,14 @@ namespace ScreenSaver.View
 		{
 			var messageBoxService = new MessageBoxService();
 			var splashScreenService = new SplashScreenService();
+			var lastInputDetector = new LastInputDetector();
+			var timerService = new TimerService();
+			var screenSaverService = new ScreenSaverService(
+				lastInputDetector, 
+				timerService,
+				splashScreenService);
 
-			return new MainViewModel(messageBoxService, splashScreenService);
+			return new MainViewModel(messageBoxService, screenSaverService);
 		}
 
 		protected override void OnStartup(StartupEventArgs e)

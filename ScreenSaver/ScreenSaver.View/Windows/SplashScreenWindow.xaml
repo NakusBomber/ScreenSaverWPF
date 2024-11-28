@@ -9,6 +9,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="Manual"
         d:DataContext="{d:DesignInstance Type=vms:SplashScreenViewModel}"
+        Cursor="None"
         Top="{Binding Top}"
         Left="{Binding Left}"
         Width="{Binding Width}"

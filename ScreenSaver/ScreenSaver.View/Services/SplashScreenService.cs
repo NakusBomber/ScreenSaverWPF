@@ -5,9 +5,9 @@ using System.Windows;
 
 namespace ScreenSaver.View.Services;
 
-public class SplashScreenService : IWindowService<SplashScreenViewModel>
+public class SplashScreenService : IWindowService<SplashScreenViewModel, Window>
 {
-	public void Show(SplashScreenViewModel viewModel)
+	public Window Show(SplashScreenViewModel viewModel)
 	{
 		var window = new SplashScreenWindow();
 		window.DataContext = viewModel;
@@ -20,10 +20,12 @@ public class SplashScreenService : IWindowService<SplashScreenViewModel>
 		
 		window.WindowStyle = WindowStyle.None;
 		window.Topmost = true;
+
+		return window;
 	}
 
-	public async Task ShowAsync(SplashScreenViewModel viewModel)
+	public async Task<Window> ShowAsync(SplashScreenViewModel viewModel)
 	{
-		await Application.Current.Dispatcher.InvokeAsync(() => Show(viewModel));
+		return await Application.Current.Dispatcher.InvokeAsync(() => Show(viewModel));
 	}
 }

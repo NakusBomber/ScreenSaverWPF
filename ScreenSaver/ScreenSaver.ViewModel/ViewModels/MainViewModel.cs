@@ -1,10 +1,10 @@
-﻿using ScreenSaver.Model.Implementations;
-using ScreenSaver.Model.Utils;
+﻿using ScreenSaver.Model.Utils;
 using ScreenSaver.ViewModel.Bases;
 using ScreenSaver.ViewModel.Interfaces;
 using ScreenSaver.ViewModel.ViewModels.Controls;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -16,8 +16,8 @@ namespace ScreenSaver.ViewModel.ViewModels;
 public class MainViewModel : ViewModelBase
 {
 	private IWindowService<MessageBoxViewModel> _messageBoxService;
-	private IWindowService<SplashScreenViewModel> _splashScreenService;
-
+	private IScreenSaverService _screenSaverService;
+	
 	public DateTimeUpDownViewModel DateTimeUpDownViewModel { get; set; }
 	public ICommand OpenSettingsWindowCommand { get; }
 	public ICommand OpenInfoWindowCommand { get; }
@@ -25,41 +25,37 @@ public class MainViewModel : ViewModelBase
 	public ICommand TestSplashScreenCommand { get; }
 
 	public MainViewModel(
-		IWindowService<MessageBoxViewModel> messageBoxService,
-		IWindowService<SplashScreenViewModel> splashScreenService)
+		IWindowService<MessageBoxViewModel> messageBoxService, 
+		IScreenSaverService screenSaverService)
 	{
 		_messageBoxService = messageBoxService;
-		_splashScreenService = splashScreenService;
+		_screenSaverService = screenSaverService;
 
 		var defaultValue = new DateTime(new DateOnly(), new TimeOnly(0, 0, 30));
-		DateTimeUpDownViewModel = new DateTimeUpDownViewModel(defaultValue);
-
+		var minimum = new DateTime(new DateOnly(), new TimeOnly(0, 0, 10));
+		DateTimeUpDownViewModel = new DateTimeUpDownViewModel(
+			defaultValue,
+			minimum: minimum,
+			actionOnValueChanged: IntervalChanged);
+		
 		OpenSettingsWindowCommand = new DelegateCommand(OpenSettingsWindow);
 		OpenInfoWindowCommand = new DelegateCommand(OpenInfoWindow);
 		TestSplashScreenCommand = new DelegateCommand(Test);
+
+		IntervalChanged();
+	}
+
+	private void IntervalChanged()
+	{
+		var dateTime = DateTimeUpDownViewModel.Value;
+		_screenSaverService.SetInterval(new TimeSpan(dateTime.Hour, dateTime.Minute, dateTime.Second));
 	}
 
 	private void Test(object? obj)
 	{
-		var screens = Screen.AllScreens;
-
-		foreach (var screen in screens)
-		{
-			var ratio = Math.Max(Screen.PrimaryScreen!.WorkingArea.Width / SystemParameters.PrimaryScreenWidth,
-							Screen.PrimaryScreen.WorkingArea.Height / SystemParameters.PrimaryScreenHeight);
-
-			var left = (int)(screen.Bounds.Left / ratio);
-			var top = (int)(screen.Bounds.Top / ratio);
-			var width = (int)(screen.Bounds.Width / ratio);
-			var height = (int)(screen.Bounds.Height / ratio);
-
-			var rectangle = new Rectangle(left, top, width, height);
-			var bitmap = MediaUtils.SolidColorBitmap(height, width, Colors.Gray);
-			var vm = new SplashScreenViewModel(rectangle, bitmap);
-
-			_splashScreenService.Show(vm);
-		}
+		_screenSaverService.OpenSplashScreen();
 	}
+
 	private void OpenSettingsWindow(object? obj)
 	{
 		var vm = new MessageBoxViewModel("Settings", "No settings yet ＞︿＜");

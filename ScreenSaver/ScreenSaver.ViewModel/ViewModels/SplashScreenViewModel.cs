@@ -5,7 +5,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Forms;
 using System.Diagnostics;
 using ScreenSaver.Model.Utils;
-using ScreenSaver.Model.Interfaces;
 using System.Drawing;
 
 namespace ScreenSaver.ViewModel.ViewModels;

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScreenSaver.View"
         xmlns:vms="clr-namespace:ScreenSaver.ViewModel.ViewModels;assembly=ScreenSaver.ViewModel"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
@@ -44,7 +44,13 @@
                                  AllowTextInput="False"
                                  DefaultValue="{Binding DefaultValue}"
                                  FormatString="HH 'hours' mm 'mins' ss 'secs'"
-                                 Minimum="{Binding Minimum}"/>
+                                 Minimum="{Binding Minimum}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="ValueChanged">
+                        <i:InvokeCommandAction Command="{Binding ValueChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </xctk:DateTimeUpDown>
         </StackPanel>
     </Grid>
 </Window>
