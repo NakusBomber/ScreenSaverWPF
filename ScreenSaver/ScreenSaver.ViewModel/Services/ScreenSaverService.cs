@@ -18,11 +18,10 @@ public class ScreenSaverService : IScreenSaverService
 
 	private TimeSpan _openTimerInterval = new TimeSpan(0, 0, 1);
 	private TimeSpan _closeTimerInterval = new TimeSpan(0, 0, 0, 0, 50);
-	private TimeSpan _lastInterval = new TimeSpan(128, 0, 0);
+	private TimeSpan? _lastInterval;
 	private List<Window> _openedWindows = new List<Window>();
 	
 	private bool _isActive = false;
-	public bool IsActive => _isActive;
 
 	public ScreenSaverService(
 		IActivityDetector activityDetector,
@@ -69,7 +68,7 @@ public class ScreenSaverService : IScreenSaverService
 	}
 	private void CloseEventHandler(object? obj, EventArgs e)
 	{
-		if (IsActive && _activityDetector.HasDetected())
+		if (_isActive && _activityDetector.HasDetected())
 		{
 			_isActive = false;
 			CloseWindows();
@@ -79,7 +78,9 @@ public class ScreenSaverService : IScreenSaverService
 
 	private void OpenEventHandler(object? obj, EventArgs e)
 	{
-		if (!IsActive && _activityDetector.NoActivityMoreThan(_lastInterval))
+		if (!_isActive && 
+			_lastInterval != null &&
+			_activityDetector.NoActivityMoreThan((TimeSpan)_lastInterval))
 		{
 			OpenSplashScreen();
 		}
@@ -100,7 +101,7 @@ public class ScreenSaverService : IScreenSaverService
 			_timerService.StartIntervalTimer(_closeTimerInterval, CloseEventHandler);
 		}
 
-		if (!IsActive)
+		if (!_isActive)
 		{
 			_isActive = true;
 			OpenWindows();

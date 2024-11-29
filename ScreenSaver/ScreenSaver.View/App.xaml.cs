@@ -19,12 +19,15 @@ namespace ScreenSaver.View
 			var splashScreenService = new SplashScreenService();
 			var lastInputDetector = new LastInputDetector();
 			var timerService = new TimerService();
-			var screenSaverService = new ScreenSaverService(
-				lastInputDetector, 
-				timerService,
-				splashScreenService);
+			var altScreenSaverService = new AltScreenSaverService(
+				lastInputDetector,
+				timerService);
+			//var screenSaverService = new ScreenSaverService(
+			//	lastInputDetector, 
+			//	timerService,
+			//	splashScreenService);
 
-			return new MainViewModel(messageBoxService, screenSaverService);
+			return new MainViewModel(messageBoxService, altScreenSaverService);
 		}
 
 		protected override void OnStartup(StartupEventArgs e)
