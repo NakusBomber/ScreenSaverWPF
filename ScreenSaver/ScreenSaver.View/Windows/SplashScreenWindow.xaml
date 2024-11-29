@@ -17,8 +17,7 @@
         Background="Black"
         Title="SplashScreenWindow">
     <Grid>
-        <Image Width="Auto"
-               Height="Auto"
+        <Image Stretch="Fill"
                Source="{Binding Bitmap}"/>
     </Grid>
 </Window>

@@ -1,5 +1,8 @@
-﻿using ScreenSaver.Model.Implementations;
+﻿using Ninject;
+using ScreenSaver.Model.Implementations;
+using ScreenSaver.Model.Interfaces;
 using ScreenSaver.View.Services;
+using ScreenSaver.ViewModel.Interfaces;
 using ScreenSaver.ViewModel.Services;
 using ScreenSaver.ViewModel.ViewModels;
 using System.Configuration;
@@ -13,26 +16,39 @@ namespace ScreenSaver.View
 	/// </summary>
 	public partial class App : Application
 	{
-		private MainViewModel RegisterMainViewModel()
-		{
-			var messageBoxService = new MessageBoxService();
-			var splashScreenService = new SplashScreenService();
-			var lastInputDetector = new LastInputDetector();
-			var timerService = new TimerService();
-			var screenSaverService = new ScreenSaverService(
-				lastInputDetector, 
-				timerService,
-				splashScreenService);
+		private IKernel _kernel = new StandardKernel();
+		private bool _alt = false;
 
-			return new MainViewModel(messageBoxService, screenSaverService);
+		private void RegisterServices()
+		{
+			_kernel.Bind<IWindowService<MessageBoxViewModel>>()
+				.To<MessageBoxService>();
+			_kernel.Bind<IWindowService<SplashScreenViewModel, Window>>()
+				.To<SplashScreenService>();
+			_kernel.Bind<IActivityDetector>().To<LastInputDetector>();
+			_kernel.Bind<ITimerService>().To<TimerService>();
+			_kernel.Bind<IImageProviderFactory>().To<ImageProviderFactory>();
+
+			if (_alt)
+			{
+				_kernel.Bind<IScreenSaverService>().To<AltScreenSaverService>();
+			}
+			else
+			{
+				_kernel.Bind<IScreenSaverService>().To<ScreenSaverService>();
+			}
+		
 		}
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
 
+			RegisterServices();
+			_kernel.Bind<MainViewModel>().ToSelf();
+
 			MainWindow = new MainWindow();
-			MainWindow.DataContext = RegisterMainViewModel();
+			MainWindow.DataContext = _kernel.Get<MainViewModel>();
 
 			MainWindow.Show();
 		}
