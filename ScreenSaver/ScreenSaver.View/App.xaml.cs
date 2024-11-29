@@ -27,6 +27,7 @@ namespace ScreenSaver.View
 				.To<SplashScreenService>();
 			_kernel.Bind<IActivityDetector>().To<LastInputDetector>();
 			_kernel.Bind<ITimerService>().To<TimerService>();
+			_kernel.Bind<IImageProviderFactory>().To<ImageProviderFactory>();
 
 			if (_alt)
 			{

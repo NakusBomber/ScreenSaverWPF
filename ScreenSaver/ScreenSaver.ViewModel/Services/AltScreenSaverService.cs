@@ -31,6 +31,10 @@ public class AltScreenSaverService : IScreenSaverService
 		}
 	}
 
+	public void SetImagePath(string imagePath)
+	{
+	}
+
 	public void SetInterval(TimeSpan interval)
 	{
 		_lastInterval = interval;

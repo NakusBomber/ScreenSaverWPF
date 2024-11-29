@@ -7,6 +7,8 @@ using System.Windows;
 using System.Drawing;
 using System.Windows.Threading;
 using ScreenSaver.Model.Interfaces;
+using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace ScreenSaver.ViewModel.Services;
 
@@ -15,7 +17,9 @@ public class ScreenSaverService : IScreenSaverService
 	private readonly IWindowService<SplashScreenViewModel, Window> _splashScreenService;
 	private readonly ITimerService _timerService;
 	private readonly IActivityDetector _activityDetector;
+	private readonly IImageProviderFactory _imageProviderFactory;
 
+	private string? _imagePath;
 	private TimeSpan _openTimerInterval = new TimeSpan(0, 0, 1);
 	private TimeSpan _closeTimerInterval = new TimeSpan(0, 0, 0, 0, 50);
 	private TimeSpan? _lastInterval;
@@ -26,11 +30,13 @@ public class ScreenSaverService : IScreenSaverService
 	public ScreenSaverService(
 		IActivityDetector activityDetector,
 		ITimerService timerService,
-		IWindowService<SplashScreenViewModel, Window> splashScreenService)
+		IWindowService<SplashScreenViewModel, Window> splashScreenService,
+		IImageProviderFactory imageProviderFactory)
 	{
 		_activityDetector = activityDetector;
 		_timerService = timerService;
 		_splashScreenService = splashScreenService;
+		_imageProviderFactory = imageProviderFactory;
 	}
 
 	private void OpenWindows()
@@ -48,7 +54,11 @@ public class ScreenSaverService : IScreenSaverService
 			var height = (int)(screen.Bounds.Height / ratio);
 
 			var rectangle = new Rectangle(left, top, width, height);
-			var bitmap = MediaUtils.SolidColorBitmap(height, width, Colors.Black);
+			var imageProvider = _imageProviderFactory
+				.SetFilePath(_imagePath)
+				.SetSolidColor(height, width, Colors.Black)
+				.Build();
+			var bitmap = imageProvider.GetImage();
 
 			var vm = new SplashScreenViewModel(rectangle, bitmap);
 			var window = _splashScreenService.Show(vm);
@@ -108,5 +118,10 @@ public class ScreenSaverService : IScreenSaverService
 			var delayInterval = new TimeSpan(0, 0, 1);
 			_timerService.StartIntervalTimer(delayInterval, timerDelay, false);
 		}
+	}
+
+	public void SetImagePath(string imagePath)
+	{
+		_imagePath = imagePath;
 	}
 }

@@ -17,7 +17,21 @@ public class MainViewModel : ViewModelBase
 {
 	private IWindowService<MessageBoxViewModel> _messageBoxService;
 	private IScreenSaverService _screenSaverService;
-	
+
+	private string? _imagePath;
+
+	public string? ImagePath
+	{
+		get => _imagePath;
+		set
+		{
+			_imagePath = value;
+			ImagePathChanged();
+			OnPropertyChanged();
+		}
+	}
+
+
 	public DateTimeUpDownViewModel DateTimeUpDownViewModel { get; set; }
 	public ICommand OpenSettingsWindowCommand { get; }
 	public ICommand OpenInfoWindowCommand { get; }
@@ -43,6 +57,12 @@ public class MainViewModel : ViewModelBase
 		TestSplashScreenCommand = new DelegateCommand(Test);
 
 		IntervalChanged();
+	}
+
+	private void ImagePathChanged()
+	{
+		_imagePath = _imagePath?.Trim(' ', '"');
+		_screenSaverService.SetImagePath(_imagePath ?? string.Empty);
 	}
 
 	private void IntervalChanged()
