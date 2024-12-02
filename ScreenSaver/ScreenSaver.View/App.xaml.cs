@@ -17,10 +17,10 @@ namespace ScreenSaver.View
 	public partial class App : Application
 	{
 		private IKernel _kernel = new StandardKernel();
-		private bool _alt = false;
 
 		private void RegisterServices()
 		{
+			_kernel.Bind<ISettingsSourse>().To<SettingsResourse>();
 			_kernel.Bind<IWindowService<MessageBoxViewModel>>()
 				.To<MessageBoxService>();
 			_kernel.Bind<IWindowService<SplashScreenViewModel, Window>>()
@@ -28,14 +28,16 @@ namespace ScreenSaver.View
 			_kernel.Bind<IActivityDetector>().To<LastInputDetector>();
 			_kernel.Bind<ITimerService>().To<TimerService>();
 			_kernel.Bind<IImageProviderFactory>().To<ImageProviderFactory>();
+			_kernel.Bind<IApplicationRestartService>().To<ApplicationRestartService>();
 
-			if (_alt)
+			var settings = _kernel.Get<ISettingsSourse>();
+			if (settings.WorkMode == Model.Models.EWorkModes.ViewImage)
 			{
-				_kernel.Bind<IScreenSaverService>().To<AltScreenSaverService>();
+				_kernel.Bind<IScreenSaverService>().To<ScreenSaverService>();
 			}
 			else
 			{
-				_kernel.Bind<IScreenSaverService>().To<ScreenSaverService>();
+				_kernel.Bind<IScreenSaverService>().To<AltScreenSaverService>();
 			}
 		
 		}

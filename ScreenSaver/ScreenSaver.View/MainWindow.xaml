@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ScreenSaver.View"
         xmlns:vms="clr-namespace:ScreenSaver.ViewModel.ViewModels;assembly=ScreenSaver.ViewModel"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:e="clr-namespace:ScreenSaver.Model.Models;assembly=ScreenSaver.Model"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
@@ -21,7 +22,14 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
-            <MenuItem Header="Settings" Command="{Binding OpenSettingsWindowCommand}"/>
+            <MenuItem Header="Settings">
+                <MenuItem Header ="Image mode"
+                          Command="{Binding ChangeModeCommand}"
+                          CommandParameter="{x:Static e:EWorkModes.ViewImage}"/>
+                <MenuItem Header ="Off monitors mode"
+                          Command="{Binding ChangeModeCommand}"
+                          CommandParameter="{x:Static e:EWorkModes.OffMonitors}"/>
+            </MenuItem>
             <MenuItem Header="Info" Command="{Binding OpenInfoWindowCommand}"/>
         </Menu>
         <StackPanel Orientation="Vertical"
